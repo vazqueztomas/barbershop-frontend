@@ -230,21 +230,21 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-          <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           Importar desde Excel
         </h2>
       </div>
 
-      <div className="p-6">
-        <p className="text-sm text-gray-500 mb-4">
-          Formato esperado: columna <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">FECHA</span> y columna <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">CORTE</span> (monto)
+      <div className="p-4 sm:p-6">
+        <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+          Formato esperado: columna <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs">FECHA</span> y columna <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs">CORTE</span> (monto)
         </p>
 
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <input
             type="file"
             accept=".xlsx,.xls,.csv"
@@ -254,55 +254,55 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
           />
           <label
             htmlFor="excel-file"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200 rounded-lg cursor-pointer transition-colors duration-200 font-medium text-sm"
+            className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200 rounded-lg cursor-pointer transition-colors duration-200 font-medium text-xs sm:text-sm"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            📁 Seleccionar archivo
+            📁 Seleccionar
           </label>
         </div>
 
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-lg">
+          <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-red-50 border border-red-100 rounded-lg">
             <div className="flex items-center gap-2 text-red-700">
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-sm font-medium">{error}</p>
+              <p className="text-xs sm:text-sm font-medium">{error}</p>
             </div>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-100 rounded-lg">
+          <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-green-50 border border-green-100 rounded-lg">
             <div className="flex items-center gap-2 text-green-700">
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-sm font-medium">¡Datos importados exitosamente!</p>
+              <p className="text-xs sm:text-sm font-medium">¡Datos importados exitosamente!</p>
             </div>
           </div>
         )}
 
         {preview.length > 0 && (
-          <div className="mt-6">
-            <div className="mb-4 p-3 bg-gray-50 border-l-4 border-gray-400 rounded-r-lg">
-              <p className="text-sm text-gray-600 italic">
+          <div className="mt-4 sm:mt-6">
+            <div className="mb-3 sm:mb-4 p-3 bg-gray-50 border-l-4 border-gray-400 rounded-r-lg">
+              <p className="text-xs sm:text-sm text-gray-600 italic">
                 ℹ️ Los cortes se calculan con los precios base actuales al momento de importar.
               </p>
             </div>
 
             {services.length > 0 && (
-              <div className="flex flex-wrap gap-4 items-end mb-4 p-4 bg-gray-50 rounded-lg">
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <div className="flex flex-col sm:flex-row gap-3 items-end mb-3 sm:mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                <div className="flex-1 w-full sm:min-w-[150px]">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2">
                     Asignar a todos
                   </label>
                   <select
                     value={bulkServiceIndex}
                     onChange={(e) => setBulkServiceIndex(parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
                   >
                     {services.map((service, index) => (
                       <option key={service.serviceName} value={index}>
@@ -313,16 +313,16 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
                 </div>
                 <button
                   onClick={applyBulkService}
-                  className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer"
                 >
-                  Aplicar a todos
+                  Aplicar
                 </button>
               </div>
             )}
 
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 flex items-center gap-2">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -330,20 +330,20 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
               </h3>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm max-h-96 overflow-y-auto">
-              <table className="w-full border-collapse text-sm">
+            <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm max-h-64 sm:max-h-96 overflow-y-auto">
+              <table className="w-full border-collapse text-xs sm:text-sm">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
-                    <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                    <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                       Fecha
                     </th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                    <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                       Total
                     </th>
-                    <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                    <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 hidden sm:table-cell">
                       Servicio
                     </th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                    <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                       Cortes
                     </th>
                   </tr>
@@ -351,15 +351,15 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
                 <tbody>
                   {preview.slice(0, 50).map((item, index) => (
                     <tr key={item.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-2.5 text-gray-700">{item.date}</td>
-                      <td className="px-4 py-2.5 text-right font-semibold text-gray-900">
+                      <td className="px-3 py-2 text-gray-700">{item.date}</td>
+                      <td className="px-3 py-2 text-right font-semibold text-gray-900">
                         {formatCurrency(item.price)}
                       </td>
-                      <td className="px-4 py-2.5">
+                      <td className="px-3 py-2 hidden sm:table-cell">
                         <select
                           value={item.serviceIndex}
                           onChange={(e) => updateItemService(index, parseInt(e.target.value, 10))}
-                          className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+                          className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
                         >
                           {services.map((service, sIndex) => (
                             <option key={service.serviceName} value={sIndex}>
@@ -368,14 +368,14 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
                           ))}
                         </select>
                       </td>
-                      <td className="px-4 py-2.5 text-right font-medium text-gray-900">
+                      <td className="px-3 py-2 text-right font-medium text-gray-900">
                         {item.count}
                       </td>
                     </tr>
                   ))}
                   {preview.length > 50 && (
                     <tr>
-                      <td colSpan={4} className="px-4 py-3 text-center text-gray-500 text-xs">
+                      <td colSpan={4} className="px-3 py-2 text-center text-gray-500 text-xs">
                         ... y {preview.length - 50} más
                       </td>
                     </tr>
@@ -384,15 +384,15 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
               </table>
             </div>
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-3 sm:mt-4 flex justify-end">
               <button
                 onClick={handleImport}
                 disabled={importing}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center"
               >
                 {importing ? (
                   <>
-                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
@@ -400,7 +400,7 @@ export function ExcelImporter({ onImportComplete }: ExcelImporterProps) {
                   </>
                 ) : (
                   <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
                     Importar {preview.length} registros

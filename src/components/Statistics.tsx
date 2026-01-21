@@ -308,13 +308,13 @@ export function Statistics() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-2 py-3 mb-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-wrap gap-2 py-2 sm:py-3 mb-4 sm:mb-6 overflow-x-auto pb-2">
         {DATE_RANGES.map((range) => (
           <button
             key={range.key}
             onClick={() => setSelectedRange(range.key)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+            className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap ${
               selectedRange === range.key
                 ? 'bg-gray-900 text-white shadow-md'
                 : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
@@ -323,14 +323,14 @@ export function Statistics() {
             {range.label}
           </button>
         ))}
-        <span className="ml-auto text-gray-500 text-sm self-center flex items-center gap-2">
+        <span className="ml-auto text-gray-500 text-xs sm:text-sm self-center flex items-center gap-2 flex-shrink-0">
           <span>({filteredHaircuts.length} registros)</span>
           <button
             onClick={() => {
               setLoading(true);
               fetchData();
             }}
-            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            className="px-2 py-1 sm:px-3 sm:py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-xs font-medium transition-colors cursor-pointer"
             title="Refrescar datos"
           >
             🔄
@@ -338,38 +338,38 @@ export function Statistics() {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mt-8 mb-8">
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-          <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Total Ingresos</span>
-          <span className="block text-2xl font-bold text-gray-900 mt-1">{formatCurrency(totalRevenue)}</span>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-5 shadow-sm border border-gray-200">
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider block">Total Ingresos</span>
+          <span className="block text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-1">{formatCurrency(totalRevenue)}</span>
         </div>
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-          <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Propinas</span>
-          <span className="block text-2xl font-bold text-green-600 mt-1">{formatCurrency(totalTip)}</span>
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-5 shadow-sm border border-gray-200">
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider block">Propinas</span>
+          <span className="block text-lg sm:text-xl lg:text-2xl font-bold text-green-600 mt-1">{formatCurrency(totalTip)}</span>
         </div>
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-          <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Total Cortes</span>
-          <span className="block text-2xl font-bold text-gray-900 mt-1">{dailyStats.reduce((sum, d) => sum + d.count, 0)}</span>
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-5 shadow-sm border border-gray-200">
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider block">Total Cortes</span>
+          <span className="block text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-1">{dailyStats.reduce((sum, d) => sum + d.count, 0)}</span>
         </div>
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-          <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Promedio Diario</span>
-          <span className="block text-2xl font-bold text-gray-900 mt-1">{formatCurrency(avgDaily)}</span>
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-5 shadow-sm border border-gray-200">
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider block">Promedio Diario</span>
+          <span className="block text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-1">{formatCurrency(avgDaily)}</span>
         </div>
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-          <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Servicio Popular</span>
-          <span className="block text-xl font-bold text-gray-900 mt-1">{topService?.name || '-'}</span>
-          <span className="text-sm text-gray-500">{topService?.count || 0} cortes</span>
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-5 shadow-sm border border-gray-200">
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider block">Servicio Popular</span>
+          <span className="block text-base sm:text-lg lg:text-xl font-bold text-gray-900 mt-1 truncate">{topService?.name || '-'}</span>
+          <span className="text-xs sm:text-sm text-gray-500">{topService?.count || 0} cortes</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Ingresos por Dia</h3>
-          <ResponsiveContainer width="100%" height={250}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Ingresos por Dia</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={dailyStats}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-              <YAxis tickFormatter={(value) => `$${Number(value) / 1000}k`} />
+              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} fontSize={10} />
+              <YAxis tickFormatter={(value) => `$${Number(value) / 1000}k`} fontSize={10} />
               <Tooltip labelFormatter={(value) => value} />
               <Area
                 type="monotone"
@@ -382,13 +382,13 @@ export function Statistics() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Propinas por Dia</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Propinas por Dia</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={dailyStats}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-              <YAxis tickFormatter={(value) => `$${Number(value) / 1000}k`} />
+              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} fontSize={10} />
+              <YAxis tickFormatter={(value) => `$${Number(value) / 1000}k`} fontSize={10} />
               <Tooltip labelFormatter={(value) => value} />
               <Area
                 type="monotone"
@@ -401,27 +401,27 @@ export function Statistics() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Cantidad de Cortes por Dia</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Cantidad de Cortes</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={dailyStats}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-              <YAxis />
+              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} fontSize={10} />
+              <YAxis fontSize={10} />
               <Tooltip labelFormatter={(value) => value} />
               <Bar dataKey="count" fill="#82ca9d" name="Cortes" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Cortes por Dia</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Cortes vs Ingresos</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={dailyStats}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} fontSize={10} />
+              <YAxis yAxisId="left" fontSize={10} />
+              <YAxis yAxisId="right" orientation="right" fontSize={10} />
               <Tooltip labelFormatter={(value) => value} />
               <Legend />
               <Line
@@ -430,6 +430,7 @@ export function Statistics() {
                 dataKey="count"
                 stroke="#0088FE"
                 name="Cortes"
+                strokeWidth={2}
               />
               <Line
                 yAxisId="right"
@@ -437,14 +438,15 @@ export function Statistics() {
                 dataKey="revenue"
                 stroke="#00C49F"
                 name="Ingresos"
+                strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Distribucion por Servicio</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Distribucion por Servicio</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={serviceStats}
@@ -452,7 +454,7 @@ export function Statistics() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
+                outerRadius={60}
               >
                 {serviceStats.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -463,14 +465,14 @@ export function Statistics() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">Propinas vs Ingresos</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-5">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Propinas vs Ingresos</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={dailyStats}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} fontSize={10} />
+              <YAxis yAxisId="left" fontSize={10} />
+              <YAxis yAxisId="right" orientation="right" fontSize={10} />
               <Tooltip labelFormatter={(value) => value} />
               <Legend />
               <Line
@@ -479,6 +481,7 @@ export function Statistics() {
                 dataKey="revenue"
                 stroke="#8884d8"
                 name="Ingresos"
+                strokeWidth={2}
               />
               <Line
                 yAxisId="right"
@@ -486,39 +489,40 @@ export function Statistics() {
                 dataKey="tip"
                 stroke="#10B981"
                 name="Propinas"
+                strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-8">
-        <h3 className="text-lg font-semibold text-gray-900 p-5 border-b border-gray-100">Detalle por Servicio</h3>
-        <div className="overflow-x-auto max-h-96 overflow-y-auto">
-          <table className="w-full text-sm text-left">
+      <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6 sm:mt-8">
+        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 p-3 sm:p-5 border-b border-gray-100">Detalle por Servicio</h3>
+        <div className="overflow-x-auto max-h-80 sm:max-h-96 overflow-y-auto">
+          <table className="w-full text-xs sm:text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium uppercase tracking-wider text-xs sticky top-0">
               <tr>
-                <th className="px-5 py-3">Servicio</th>
-                <th className="px-5 py-3">Cantidad</th>
-                <th className="px-5 py-3">Ingresos</th>
-                <th className="px-5 py-3">Participación</th>
+                <th className="px-3 py-2 sm:px-5 sm:py-3">Servicio</th>
+                <th className="px-3 py-2 sm:px-5 sm:py-3">Cantidad</th>
+                <th className="px-3 py-2 sm:px-5 sm:py-3">Ingresos</th>
+                <th className="px-3 py-2 sm:px-5 sm:py-3">Participación</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {serviceStats.map((service) => (
                 <tr key={service.name} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-5 py-3 font-medium text-gray-900">{service.name}</td>
-                  <td className="px-5 py-3 text-gray-600">{service.count}</td>
-                  <td className="px-5 py-3 text-gray-600">{formatCurrency(service.revenue)}</td>
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <td className="px-3 py-2 sm:px-5 sm:py-3 font-medium text-gray-900 truncate max-w-[120px] sm:max-w-none">{service.name}</td>
+                  <td className="px-3 py-2 sm:px-5 sm:py-3 text-gray-600">{service.count}</td>
+                  <td className="px-3 py-2 sm:px-5 sm:py-3 text-gray-600">{formatCurrency(service.revenue)}</td>
+                  <td className="px-3 py-2 sm:px-5 sm:py-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="flex-1 h-1.5 sm:h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gray-900 rounded-full transition-all duration-300"
                           style={{ width: `${service.percentage}%` }}
                         />
                       </div>
-                      <span className="text-gray-600 text-xs font-medium w-12 text-right">{service.percentage.toFixed(1)}%</span>
+                      <span className="text-gray-600 text-xs font-medium w-10 sm:w-12 text-right flex-shrink-0">{service.percentage.toFixed(1)}%</span>
                     </div>
                   </td>
                 </tr>

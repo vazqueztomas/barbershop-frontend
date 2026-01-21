@@ -114,14 +114,14 @@ export function DateSearchBar({
   return (
     <div className={`date-search-bar ${className}`}>
       <div className="date-search-content">
-        <form onSubmit={handleNaturalInputSubmit} className="natural-input-form">
+        <form onSubmit={handleNaturalInputSubmit} className="natural-input-form mb-3 sm:mb-4">
           <div className="form-group" ref={inputRef}>
             <input
               type="text"
               value={naturalInput}
               onChange={handleNaturalInputChange}
               placeholder={placeholder}
-              className={`form-input ${validationError ? 'error' : ''}`}
+              className={`form-input text-sm ${validationError ? 'error' : ''}`}
               disabled={loading}
               autoComplete="off"
             />
@@ -154,28 +154,28 @@ export function DateSearchBar({
           ))}
         </div>
 
-        <div className="custom-date-range">
-          <div className="date-inputs">
+        <div className="custom-date-range mt-3 sm:mt-4">
+          <div className="date-inputs grid-cols-1 sm:grid-cols-2">
             <div className="form-group">
-              <label htmlFor="start-date">Desde</label>
+              <label htmlFor="start-date" className="text-xs sm:text-sm">Desde</label>
               <input
                 id="start-date"
                 type="date"
                 value={startDate}
                 onChange={(e) => handleCustomDateChange('start', e.target.value)}
-                className={`form-input ${validationError ? 'error' : ''}`}
+                className={`form-input text-sm ${validationError ? 'error' : ''}`}
                 disabled={loading}
                 max={formatDateForAPI(today)}
               />
             </div>
             <div className="form-group">
-              <label htmlFor="end-date">Hasta</label>
+              <label htmlFor="end-date" className="text-xs sm:text-sm">Hasta</label>
               <input
                 id="end-date"
                 type="date"
                 value={endDate}
                 onChange={(e) => handleCustomDateChange('end', e.target.value)}
-                className={`form-input ${validationError ? 'error' : ''}`}
+                className={`form-input text-sm ${validationError ? 'error' : ''}`}
                 disabled={loading}
                 max={formatDateForAPI(today)}
                 min={startDate}
@@ -185,7 +185,7 @@ export function DateSearchBar({
         </div>
 
         {(validationError || error) && (
-          <div className="error-message" role="alert">
+          <div className="error-message text-xs sm:text-sm" role="alert">
             {validationError || error}
           </div>
         )}
