@@ -1,0 +1,409 @@
+import { useMemo, useState, useEffect } from 'react';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from 'recharts';
+import { Haircut } from '../types';
+import { haircutService } from '../services/haircutService';
+
+interface DailyStats {
+  date: string;
+  dayName: string;
+  revenue: number;
+  count: number;
+  avgPrice: number;
+}
+
+type DateRangeKey = 'all' | 'today' | 'week' | '15days' | '30days' | '3months' | 'year';
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+
+const getDayName = (dateStr: string): string => {
+  const parts = dateStr.split(/[\/\-\.]/);
+  let day = parts[0];
+  let month = parts[1];
+  const year = parts[2];
+  if (day.length === 1) day = `0${day}`;
+  if (month.length === 1) month = `0${month}`;
+  const date = new Date(`${year}-${month}-${day}`);
+  const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  return days[date.getDay()];
+};
+
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
+const formatDateForComparison = (dateStr: string): string => {
+  const parts = dateStr.split(/[\/\-\.]/);
+  if (parts.length >= 3) {
+    let day = parts[0];
+    let month = parts[1];
+    let year = parts[2];
+    if (day.length === 1) day = `0${day}`;
+    if (month.length === 1) month = `0${month}`;
+    if (year.length === 2) year = `20${year}`;
+    return `${year}-${month}-${day}`;
+  }
+  return dateStr;
+};
+
+const parseDateStr = (dateStr: string): Date => {
+  const parts = dateStr.split(/[\/\-\.]/);
+  let day = parts[0];
+  let month = parts[1];
+  const year = parts[2];
+  if (day.length === 1) day = `0${day}`;
+  if (month.length === 1) month = `0${month}`;
+  return new Date(`${year}-${month}-${day}`);
+};
+
+const DATE_RANGES: { key: DateRangeKey; label: string }[] = [
+  { key: 'all', label: 'Todo' },
+  { key: 'today', label: 'Hoy' },
+  { key: 'week', label: 'Esta semana' },
+  { key: '15days', label: 'Últimos 15 días' },
+  { key: '30days', label: 'Últimos 30 días' },
+  { key: '3months', label: 'Últimos 3 meses' },
+  { key: 'year', label: 'Último año' },
+];
+
+export function Statistics() {
+  const [haircuts, setHaircuts] = useState<Haircut[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedRange, setSelectedRange] = useState<DateRangeKey>('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const calculateDateRange = (range: DateRangeKey, existingData?: Haircut[]): { start: string; end: string } => {
+    const today = new Date();
+    let start = new Date(today);
+    
+    if (range === 'all' && existingData && existingData.length > 0) {
+      const dates = existingData.map(h => parseDateStr(h.date));
+      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+      return {
+        start: minDate.toISOString().split('T')[0],
+        end: today.toISOString().split('T')[0],
+      };
+    }
+    
+    switch (range) {
+      case 'today':
+        break;
+      case 'week':
+        start.setDate(today.getDate() - 7);
+        break;
+      case '15days':
+        start.setDate(today.getDate() - 15);
+        break;
+      case '30days':
+        start.setDate(today.getDate() - 30);
+        break;
+      case '3months':
+        start.setMonth(today.getMonth() - 3);
+        break;
+      case 'year':
+        start.setFullYear(today.getFullYear() - 1);
+        break;
+      case 'all':
+      default:
+        start.setMonth(today.getMonth() - 1);
+        break;
+    }
+    
+    return {
+      start: start.toISOString().split('T')[0],
+      end: today.toISOString().split('T')[0],
+    };
+  };
+
+  useEffect(() => {
+    const range = calculateDateRange(selectedRange, haircuts);
+    setStartDate(range.start);
+    setEndDate(range.end);
+  }, [selectedRange, haircuts]);
+
+  const fetchData = async () => {
+    try {
+      const data = await haircutService.getAll();
+      setHaircuts(data);
+      
+      if (data.length > 0 && !startDate) {
+        const range = calculateDateRange('all', data);
+        setStartDate(range.start);
+        setEndDate(range.end);
+      }
+    } catch (err) {
+      console.error('Error fetching haircuts:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const filteredHaircuts = useMemo(() => {
+    if (!startDate || !endDate) return haircuts;
+    return haircuts.filter(h => {
+      const haircutDate = formatDateForComparison(h.date);
+      return haircutDate >= startDate && haircutDate <= endDate;
+    });
+  }, [haircuts, startDate, endDate]);
+
+  const dailyStats: DailyStats[] = useMemo(() => {
+    if (!startDate || !endDate) return [];
+    
+    const stats: Map<string, DailyStats> = new Map();
+    const start = parseDateStr(startDate);
+    const end = parseDateStr(endDate);
+    const current = new Date(start);
+    
+    while (current <= end) {
+      const dateStr = current.toISOString().split('T')[0];
+      stats.set(dateStr, {
+        date: dateStr,
+        dayName: getDayName(dateStr),
+        revenue: 0,
+        count: 0,
+        avgPrice: 0,
+      });
+      current.setDate(current.getDate() + 1);
+    }
+    
+    filteredHaircuts.forEach(h => {
+      const dateStr = formatDateForComparison(h.date);
+      const existing = stats.get(dateStr);
+      if (existing) {
+        existing.count += 1;
+        existing.revenue += h.price;
+        existing.avgPrice = existing.count > 0 ? existing.revenue / existing.count : 0;
+      }
+    });
+    
+    return Array.from(stats.values());
+  }, [filteredHaircuts, startDate, endDate]);
+
+  const serviceStats = useMemo(() => {
+    const serviceMap = new Map<string, { count: number; revenue: number }>();
+
+    filteredHaircuts.forEach((haircut) => {
+      const service = haircut.serviceName;
+      const existing = serviceMap.get(service) || { count: 0, revenue: 0 };
+      serviceMap.set(service, {
+        count: existing.count + 1,
+        revenue: existing.revenue + haircut.price,
+      });
+    });
+
+    const totalCount = filteredHaircuts.length;
+    const stats = Array.from(serviceMap.entries()).map(([name, data]) => ({
+      name,
+      count: data.count,
+      revenue: data.revenue,
+      percentage: totalCount > 0 ? (data.count / totalCount) * 100 : 0,
+    }));
+
+    return stats.sort((a: { count: number }, b: { count: number }) => b.count - a.count);
+  }, [filteredHaircuts]);
+
+  const totalRevenue = useMemo(
+    () => filteredHaircuts.reduce((sum, h) => sum + h.price, 0),
+    [filteredHaircuts]
+  );
+
+  const avgDaily = useMemo(() => {
+    const uniqueDays = new Set(filteredHaircuts.map((h) => formatDateForComparison(h.date))).size;
+    return uniqueDays > 0 ? totalRevenue / uniqueDays : 0;
+  }, [filteredHaircuts, totalRevenue]);
+
+  const topService = serviceStats[0];
+
+  if (loading) {
+    return <div className="empty-state">Cargando estadísticas...</div>;
+  }
+
+  return (
+    <div className="statistics">
+      <div className="date-range-selector" style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        {DATE_RANGES.map((range) => (
+          <button
+            key={range.key}
+            onClick={() => setSelectedRange(range.key)}
+            style={{ 
+              cursor: 'pointer', 
+              padding: '0.5rem 1rem',
+              border: selectedRange === range.key ? 'none' : '1px solid var(--border-color)',
+              borderRadius: 'var(--border-radius)',
+              background: selectedRange === range.key ? 'var(--primary-color)' : 'var(--bg-secondary)',
+              color: selectedRange === range.key ? 'white' : 'var(--text-primary)',
+              fontSize: '0.875rem',
+              fontWeight: selectedRange === range.key ? '500' : '400',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {range.label}
+          </button>
+        ))}
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginLeft: 'auto', alignSelf: 'center' }}>
+          ({filteredHaircuts.length} cortes)
+        </span>
+      </div>
+
+      <div className="stats-summary">
+        <div className="summary-stat">
+          <span className="label">Total Ingresos</span>
+          <span className="value">{formatCurrency(totalRevenue)}</span>
+        </div>
+        <div className="summary-stat">
+          <span className="label">Total Cortes</span>
+          <span className="value">{filteredHaircuts.length}</span>
+        </div>
+        <div className="summary-stat">
+          <span className="label">Promedio Diario</span>
+          <span className="value">{formatCurrency(avgDaily)}</span>
+        </div>
+        <div className="summary-stat">
+          <span className="label">Servicio Popular</span>
+          <span className="value">{topService?.name || '-'}</span>
+          <span className="sublabel">{topService?.count || 0} cortes</span>
+        </div>
+      </div>
+
+      <div className="charts-grid">
+        <div className="chart-card">
+          <h3>Ingresos por Dia</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <AreaChart data={dailyStats}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dayName" />
+              <YAxis tickFormatter={(value) => `$${Number(value) / 1000}k`} />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="revenue"
+                stroke="#8884d8"
+                fill="#8884d8"
+                fillOpacity={0.3}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-card">
+          <h3>Cantidad de Cortes por Dia</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={dailyStats}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dayName" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#82ca9d" name="Cortes" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-card">
+          <h3>Distribucion por Servicio</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={serviceStats}
+                dataKey="count"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+              >
+                {serviceStats.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-card">
+          <h3>Cortes por Dia</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={dailyStats}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dayName" />
+              <YAxis yAxisId="left" />
+              <YAxis yAxisId="right" orientation="right" />
+              <Tooltip />
+              <Legend />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="count"
+                stroke="#0088FE"
+                name="Cortes"
+              />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="revenue"
+                stroke="#00C49F"
+                name="Ingresos"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="stats-table-container">
+        <h3>Detalle por Servicio</h3>
+        <table className="stats-table">
+          <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Cantidad</th>
+              <th>Ingresos</th>
+              <th>Participacion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {serviceStats.map((service) => (
+              <tr key={service.name}>
+                <td>{service.name}</td>
+                <td>{service.count}</td>
+                <td>{formatCurrency(service.revenue)}</td>
+                <td>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${service.percentage}%` }}
+                    />
+                    <span>{service.percentage.toFixed(1)}%</span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
