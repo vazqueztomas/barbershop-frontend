@@ -2,8 +2,15 @@ import axios from 'axios';
 import { DailySummary, DailyHistory, Haircut, HaircutCreate, ServicePrice } from '../types';
 import { API_URL } from '../config';
 
+const getBaseUrl = () => {
+  if (API_URL) {
+    return `${API_URL}/haircuts`;
+  }
+  return '/haircuts';
+};
+
 const api = axios.create({
-  baseURL: `${API_URL}/haircuts`,
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },

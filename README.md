@@ -51,6 +51,27 @@ El servidor de desarrollo corre en `http://localhost:3000` y proxyifica las peti
 npm run build
 ```
 
+## Despliegue en Vercel
+
+### Configuración de Variables de Entorno
+
+Para el despliegue en Vercel, necesitas configurar la siguiente variable de entorno:
+
+1. En el dashboard de Vercel, ve a **Settings > Environment Variables**
+2. Agrega la siguiente variable:
+   - **Name**: `VITE_API_URL`
+   - **Value**: (dejar vacío para producción, o la URL del API en desarrollo)
+   - **Environment**: `Production`, `Development`, `Preview` (todas)
+
+### Despliegue
+
+El proyecto está configurado para desplegarse automáticamente desde GitHub. El archivo `vercel.json` en el directorio raíz del proyecto configura:
+- `buildCommand`: `cd ../barbershop-frontend && npm install && npm run build`
+- `outputDirectory`: `../barbershop-frontend/dist`
+- Rutas de API dirigidas al backend Python
+
+Asegúrate de que el backend también esté desplegado y accesible.
+
 ## Testing
 
 ```bash
