@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import {
+  format,
+} from 'date-fns';
 import { HaircutCreate, ServicePrice } from '../types';
 import { haircutService } from '../services/haircutService';
 
@@ -16,7 +19,7 @@ interface HaircutEntry {
 }
 
 export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProps) {
-  const today = new Date().toISOString().split('T')[0];
+  const today = format(new Date(), 'yyyy-MM-dd');
   const [services, setServices] = useState<ServicePrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewService, setShowNewService] = useState(false);
@@ -170,16 +173,16 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="p-3 sm:p-4 bg-gray-50 border-l-4 border-gray-400 rounded-lg">
-        <p className="text-xs sm:text-sm text-gray-600 italic">
-          ℹ️ Ingresa la cantidad de cortes y el precio se calcula automáticamente.
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-2.5 bg-gray-50 border-l-4 border-gray-400 rounded-lg">
+        <p className="text-xs text-gray-600 italic">
+          ℹ️ Ingresa la cantidad y el precio se calcula.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div>
-          <label htmlFor="clientName" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="col-span-2 sm:col-span-1">
+          <label htmlFor="clientName" className="block text-xs font-medium text-gray-700 mb-1">
             Cliente
           </label>
           <input
@@ -187,13 +190,13 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
             id="clientName"
             value={clientName}
             onChange={(e) => setClientName(e.target.value)}
-            placeholder="Nombre del cliente"
-            className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+            placeholder="Nombre"
+            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
             required
           />
         </div>
         <div>
-          <label htmlFor="date" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+          <label htmlFor="date" className="block text-xs font-medium text-gray-700 mb-1">
             Fecha
           </label>
           <input
@@ -202,73 +205,52 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
             value={date}
             onChange={(e) => setDate(e.target.value)}
             max={today}
-            className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900"
             required
           />
         </div>
         <div>
-          <label htmlFor="time" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-            Hora (opcional)
+          <label htmlFor="time" className="block text-xs font-medium text-gray-700 mb-1">
+            Hora
           </label>
           <input
             type="time"
             id="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
-          />
-        </div>
-        <div>
-          <label htmlFor="tip" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-            Propina (opcional)
-          </label>
-          <input
-            type="number"
-            id="tip"
-            value={tip || ''}
-            onChange={(e) => setTip(parseInt(e.target.value) || 0)}
-            placeholder="0"
-            min="0"
-            className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900"
           />
         </div>
       </div>
 
       {showNewService && addingServiceIndex !== null && (
-        <div className="p-4 sm:p-6 bg-gray-50 rounded-xl border border-gray-200">
-          <h4 className="text-xs sm:text-sm font-semibold text-gray-900 mb-3 sm:mb-4">Crear nuevo servicio</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="text-xs font-semibold text-gray-900 mb-2">Nuevo servicio</h4>
+          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-                Nombre del servicio
-              </label>
               <input
                 type="text"
                 value={newServiceName}
                 onChange={(e) => setNewServiceName(e.target.value)}
-                placeholder="Ej: Corte infantil"
-                className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+                placeholder="Nombre"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
               />
             </div>
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-                Precio base
-              </label>
               <input
                 type="number"
                 value={newServicePrice || ''}
                 onChange={(e) => setNewServicePrice(parseInt(e.target.value, 10) || 0)}
-                placeholder="0"
-                min="0"
-                className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+                placeholder="Precio"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
               />
             </div>
-            <div className="flex gap-2 sm:col-span-2">
+            <div className="flex gap-2 col-span-2">
               <button
                 type="button"
                 onClick={handleAddNewService}
                 disabled={!newServiceName.trim() || newServicePrice <= 0}
-                className="flex-1 sm:flex-none px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs sm:text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-medium disabled:opacity-50"
               >
                 ✓ Agregar
               </button>
@@ -280,7 +262,7 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
                   setNewServicePrice(0);
                   setAddingServiceIndex(null);
                 }}
-                className="flex-1 sm:flex-none px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs sm:text-sm font-medium"
+                className="flex-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs font-medium"
               >
                 Cancelar
               </button>
@@ -289,60 +271,60 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
         </div>
       )}
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <label className="block text-xs sm:text-sm font-medium text-gray-700">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-medium text-gray-700">
             Cortes
           </label>
           <button
             type="button"
             onClick={addEntry}
-            className="inline-flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs sm:text-sm font-medium"
+            className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
           >
-            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             + Agregar
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {entries.map((entry, index) => (
-            <div key={entry.id} className="flex flex-col sm:flex-row sm:items-end gap-3 p-3 sm:p-4 bg-white border border-gray-200 rounded-lg sm:rounded-xl">
+            <div key={entry.id} className="flex flex-col gap-2 p-2.5 bg-white border border-gray-200 rounded-lg sm:flex-row sm:items-end sm:gap-3">
               <div className="flex-1 min-w-0">
                 {loading ? (
-                  <div className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-gray-100 rounded-lg text-sm text-gray-500">
+                  <div className="w-full px-3 py-2 bg-gray-100 rounded-lg text-sm text-gray-500">
                     Cargando...
                   </div>
                 ) : (
                   <select
                     value={entry.serviceName}
                     onChange={(e) => handleServiceSelect(entry.id, e.target.value, index)}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900"
                     required
                   >
-                    <option value="">Seleccionar servicio</option>
+                    <option value="">Servicio</option>
                     {services.map((service) => (
                       <option key={service.serviceName} value={service.serviceName}>
-                        {service.serviceName} ({formatCurrency(service.basePrice)})
+                        {service.serviceName}
                       </option>
                     ))}
-                    <option value="__new__">+ Crear nuevo servicio...</option>
+                    <option value="__new__">+ Crear nuevo...</option>
                   </select>
                 )}
               </div>
-              <div className="w-20 sm:w-24">
+              <div className="w-16 sm:w-20">
                 <input
                   type="number"
                   value={entry.count || ''}
                   onChange={(e) => updateEntry(entry.id, 'count', parseInt(e.target.value) || 0)}
                   placeholder="0"
                   min="0"
-                  className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
                   required
                 />
               </div>
-              <div className="w-24 sm:w-28 px-3 py-2.5 sm:px-4 sm:py-3 bg-gray-100 rounded-lg text-center">
+              <div className="w-20 px-3 py-2 bg-gray-100 rounded-lg text-center">
                 <span className="text-sm font-medium text-gray-700">
                   {entry.price > 0 ? formatCurrency(entry.price) : '-'}
                 </span>
@@ -351,10 +333,10 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
                 <button
                   type="button"
                   onClick={() => removeEntry(entry.id)}
-                  className="self-center sm:self-auto p-2.5 sm:p-3 bg-gray-100 hover:bg-red-50 text-gray-500 hover:text-red-600 rounded-lg transition-colors"
+                  className="self-center p-2 bg-gray-100 hover:bg-red-50 text-gray-500 hover:text-red-600 rounded-lg transition-colors"
                   title="Eliminar"
                 >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
@@ -364,46 +346,26 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-100">
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm text-gray-500">Cortes:</span>
-            <span className="text-base sm:text-lg font-semibold text-gray-900">{totalCount}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm text-gray-500">Servicios:</span>
-            <span className="text-base sm:text-lg font-semibold text-gray-900">
-              {formatCurrency(entries.reduce((sum, e) => sum + e.price, 0))}
-            </span>
-          </div>
-          {tip > 0 && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-green-50 rounded-lg">
-              <span className="text-xs sm:text-sm text-green-700">Propina:</span>
-              <span className="text-base sm:text-lg font-semibold text-green-700">
-                {formatCurrency(tip)}
-              </span>
-            </div>
-          )}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-1.5 bg-gray-900 rounded-lg">
-            <span className="text-xs sm:text-sm text-gray-300">Total:</span>
-            <span className="text-lg sm:text-xl font-bold text-white">
-              {formatCurrency(totalRevenue)}
-            </span>
-          </div>
+      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500">Total:</span>
+          <span className="px-2 py-1 bg-gray-900 rounded-lg text-sm font-bold text-white">
+            {formatCurrency(totalRevenue)}
+          </span>
         </div>
         <div className="flex-1"></div>
         <div className="flex gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 sm:flex-none px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs sm:text-sm font-medium"
+            className="flex-1 sm:flex-none px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={!clientName.trim() || totalCount === 0}
-            className="flex-1 sm:flex-none px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs sm:text-sm font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 sm:flex-none px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-medium disabled:opacity-50"
           >
             Guardar
           </button>
