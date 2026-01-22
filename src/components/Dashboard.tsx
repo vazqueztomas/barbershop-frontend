@@ -1,25 +1,37 @@
-import { useState, useEffect } from 'react';
-import { Haircut, HaircutCreate } from '../types';
-import { HaircutForm } from './HaircutForm';
-import { HaircutList } from './HaircutList';
-import { DailyHistoryList } from './DailyHistoryList';
-import { DateSearchBar } from './DateSearchBar';
-import { PriceEditor } from './PriceEditor';
-import { Statistics } from './Statistics';
-import { ExcelImporter } from './ExcelImporter';
-import { ServicePricesConfig } from './ServicePricesConfig';
-import { useHaircuts, useDailySummary } from '../hooks/useHaircuts';
-import { useDateSearch } from '../hooks/useDateSearch';
-import { useGlobalStats } from '../hooks/useGlobalStats';
-import { haircutService } from '../services/haircutService';
+import { useState, useEffect } from "react";
+import { Haircut, HaircutCreate } from "../types";
+import { HaircutForm } from "./HaircutForm";
+import { HaircutList } from "./HaircutList";
+import { DailyHistoryList } from "./DailyHistoryList";
+import { DateSearchBar } from "./DateSearchBar";
+import { PriceEditor } from "./PriceEditor";
+import { Statistics } from "./Statistics";
+import { ExcelImporter } from "./ExcelImporter";
+import { ServicePricesConfig } from "./ServicePricesConfig";
+import { useHaircuts, useDailySummary } from "../hooks/useHaircuts";
+import { useDateSearch } from "../hooks/useDateSearch";
+import { useGlobalStats } from "../hooks/useGlobalStats";
+import { haircutService } from "../services/haircutService";
 
-export type TabType = 'sales' | 'history' | 'import' | 'stats' | 'config';
+export type TabType = "sales" | "history" | "import" | "stats" | "config";
 
 export function Dashboard() {
-  const { haircuts, loading, error, addHaircut, updateHaircut, updatePrice, deleteHaircut, refetch } =
-    useHaircuts();
+  const {
+    haircuts,
+    loading,
+    error,
+    addHaircut,
+    updateHaircut,
+    updatePrice,
+    deleteHaircut,
+    refetch,
+  } = useHaircuts();
   const { summary, history, refetch: refetchSummary } = useDailySummary();
-  const { stats: globalStats, refetch: refetchGlobalStats, formatCurrency } = useGlobalStats();
+  const {
+    stats: globalStats,
+    refetch: refetchGlobalStats,
+    formatCurrency,
+  } = useGlobalStats();
   const {
     searchQuery,
     dateRange,
@@ -33,12 +45,12 @@ export function Dashboard() {
   const [editingHaircut, setEditingHaircut] = useState<Haircut | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
-  const [newPrice, setNewPrice] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('sales');
+  const [newPrice, setNewPrice] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<TabType>("sales");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (activeTab !== 'sales') {
+    if (activeTab !== "sales") {
       setShowForm(false);
       setEditingHaircut(null);
     }
@@ -67,7 +79,7 @@ export function Dashboard() {
       refetchSummary();
       refetchGlobalStats();
     } catch (err) {
-      console.error('Error saving haircut:', err);
+      console.error("Error saving haircut:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -84,7 +96,7 @@ export function Dashboard() {
       refetchSummary();
       refetchGlobalStats();
     } catch (err) {
-      console.error('Error deleting haircut:', err);
+      console.error("Error deleting haircut:", err);
     }
   };
 
@@ -101,17 +113,17 @@ export function Dashboard() {
     try {
       await updatePrice(id, price);
       setEditingPrice(null);
-      setNewPrice('');
+      setNewPrice("");
       refetchSummary();
       refetchGlobalStats();
     } catch (err) {
-      console.error('Error updating price:', err);
+      console.error("Error updating price:", err);
     }
   };
 
   const handleCancelPriceEdit = () => {
     setEditingPrice(null);
-    setNewPrice('');
+    setNewPrice("");
   };
 
   const handleDeleteToday = async () => {
@@ -129,21 +141,36 @@ export function Dashboard() {
     }
   };
 
-  const avgTicket = summary?.count && summary.count > 0 
-    ? summary.total / summary.count 
-    : 0;
+  const avgTicket =
+    summary?.count && summary.count > 0 ? summary.total / summary.count : 0;
 
   if (loading) {
     return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <div className="text-center mb-5 sm:mb-10">
-          <h1 className="text-xl sm:text-3xl font-bold text-gray-900 tracking-tight">Barbershop</h1>
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            La Cueva
+          </h1>
         </div>
         <div className="text-center py-6 sm:py-12">
           <div className="w-10 h-10 sm:w-16 sm:h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-            <svg className="w-5 h-5 sm:w-8 sm:h-8 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            <svg
+              className="w-5 h-5 sm:w-8 sm:h-8 text-gray-400 animate-spin"
+              fill="none"
+              viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
             </svg>
           </div>
           <p className="text-gray-500 font-medium text-sm">Cargando...</p>
@@ -153,109 +180,136 @@ export function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-      <div className="text-center mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Barbershop</h1>
+    <div className="max-w-full mx-auto px-3 sm:px-4 md:px-12 py-3 sm:py-4">
+      <div className="text-center mb-4 sm:mb-6 md:mb-8">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight pb-2 sm:pb-3">
+          La Cueva - Backoffice
+        </h1>
       </div>
 
       {error && (
-        <div className="mb-3 p-3 bg-red-50 border border-red-100 rounded-lg">
+        <div className="mb-3 p-2.5 sm:p-3 bg-red-50 border border-red-100 rounded-lg">
           <div className="flex items-center gap-2 text-red-700">
-            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-4 h-4 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <p className="font-medium text-sm">{error}</p>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-3 mb-5 sm:mb-8 lg:mb-10">
-        <div className="bg-gray-900 text-white rounded-xl p-4 shadow-lg">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Hoy</p>
-          <p className="text-2xl font-bold">{summary?.count || 0}</p>
-          <p className="text-xs text-gray-400 mt-0.5">cortes</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:mb-6 md:gap-5 mb-4 sm:mb-6 md:mb-8">
+        <div className="bg-gray-900 text-white rounded-xl p-5 sm:p-6 md:p-6 shadow-lg">
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-400 uppercase tracking-wider mb-2">
+            Hoy
+          </p>
+          <p className="text-2xl sm:text-3xl md:text-3xl font-bold">{summary?.count || 0}</p>
+          <p className="text-sm sm:text-sm md:text-base text-gray-400 mt-1">cortes</p>
         </div>
-        <div className="bg-gray-800 text-white rounded-xl p-4 shadow-lg">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Recaudado</p>
-          <p className="text-xl font-bold">
+        <div className="bg-gray-800 text-white rounded-xl p-5 sm:p-6 md:p-6 shadow-lg">
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-400 uppercase tracking-wider mb-2">
+            Recaudado
+          </p>
+          <p className="text-xl sm:text-2xl md:text-3xl font-bold">
             {formatCurrency((summary?.total || 0) + (summary?.tip || 0))}
           </p>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
             servicio: {formatCurrency(summary?.total || 0)}
             {(summary?.tip || 0) > 0 && (
-              <span className="text-green-400"> + prop: {formatCurrency(summary?.tip || 0)}</span>
+              <span className="text-green-400">
+                {" "}
+                + prop: {formatCurrency(summary?.tip || 0)}
+              </span>
             )}
           </p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total</p>
-          <p className="text-xl font-bold text-gray-900">{globalStats.totalCuts}</p>
-          <p className="text-xs text-gray-500 mt-0.5">Ingresos: {formatCurrency(globalStats.totalRevenue)}</p>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 md:p-6 shadow-sm">
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            Total General
+          </p>
+          <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+            {globalStats.totalCuts}
+          </p>
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-1">
+            Ingresos: {formatCurrency(globalStats.totalRevenue)}
+          </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-3 py-2.5 sm:px-5 sm:py-4 border-b border-gray-100 bg-gray-50/50">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap gap-1 max-w-full overflow-x-auto pb-1">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden md:mb-6">
+        <div className="px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-4 border-b border-gray-100 bg-gray-50/50">
+          <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 max-w-full overflow-x-auto pb-1 sm:pb-0">
               <button
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                  activeTab === 'sales'
-                    ? 'bg-gray-900 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  activeTab === "sales"
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setActiveTab('sales')}
-              >
+                onClick={() => setActiveTab("sales")}>
                 Ventas
               </button>
               <button
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                  activeTab === 'history'
-                    ? 'bg-gray-900 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  activeTab === "history"
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setActiveTab('history')}
-              >
+                onClick={() => setActiveTab("history")}>
                 Historial
               </button>
               <button
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                  activeTab === 'import'
-                    ? 'bg-gray-900 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  activeTab === "import"
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setActiveTab('import')}
-              >
+                onClick={() => setActiveTab("import")}>
                 Importar
               </button>
               <button
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                  activeTab === 'stats'
-                    ? 'bg-gray-900 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  activeTab === "stats"
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setActiveTab('stats')}
-              >
+                onClick={() => setActiveTab("stats")}>
                 Stats
               </button>
               <button
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                  activeTab === 'config'
-                    ? 'bg-gray-900 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  activeTab === "config"
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setActiveTab('config')}
-              >
+                onClick={() => setActiveTab("config")}>
                 Config
               </button>
             </div>
-            {activeTab === 'sales' && (
+            {activeTab === "sales" && (
               <button
                 onClick={handleCreate}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-medium transition-all duration-200 shadow-sm flex-shrink-0"
-              >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                className="inline-flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 md:px-4 md:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm flex-shrink-0">
+                <svg
+                  className="w-3 h-3 sm:w-4 sm:h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 + Nuevo
               </button>
@@ -263,54 +317,85 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="p-3 sm:p-4 lg:p-6">
+        <div className="p-3 sm:p-4 md:p-6">
           {showForm && (
             <div className="mb-3 p-3 sm:p-6 bg-gray-50 rounded-lg border border-gray-100">
               <div className="flex items-center justify-between mb-2 sm:mb-4">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  {editingHaircut ? 'Editar Venta' : 'Nueva Venta'}
+                  {editingHaircut ? "Editar Venta" : "Nueva Venta"}
                 </h3>
                 <button
                   onClick={handleCancel}
-                  className="w-7 h-7 inline-flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-600 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  className="w-7 h-7 inline-flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-600 transition-colors">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
               <HaircutForm
                 onSubmit={handleSubmit}
-                initialData={editingHaircut ? {
-                  clientName: editingHaircut.clientName,
-                  serviceName: editingHaircut.serviceName,
-                  price: editingHaircut.price,
-                  date: editingHaircut.date,
-                  time: editingHaircut.time,
-                  count: editingHaircut.count,
-                  tip: editingHaircut.tip
-                } : undefined}
+                initialData={
+                  editingHaircut
+                    ? {
+                        clientName: editingHaircut.clientName,
+                        serviceName: editingHaircut.serviceName,
+                        price: editingHaircut.price,
+                        date: editingHaircut.date,
+                        time: editingHaircut.time,
+                        count: editingHaircut.count,
+                        tip: editingHaircut.tip,
+                      }
+                    : undefined
+                }
                 onCancel={handleCancel}
               />
             </div>
           )}
 
-          {activeTab === 'sales' && (
+          {activeTab === "sales" && (
             <div>
               {haircuts.length === 0 ? (
                 <div className="text-center py-6 sm:py-10">
                   <div className="w-10 h-10 sm:w-16 sm:h-16 mx-auto mb-2.5 rounded-full bg-gray-100 flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-8 sm:h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    <svg
+                      className="w-5 h-5 sm:w-8 sm:h-8 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                      />
                     </svg>
                   </div>
-                  <p className="text-gray-500 font-medium mb-3 text-sm">Sin ventas hoy</p>
+                  <p className="text-gray-500 font-medium mb-3 text-sm">
+                    Sin ventas hoy
+                  </p>
                   <button
                     onClick={handleCreate}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all duration-200 shadow-sm text-sm"
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all duration-200 shadow-sm text-sm">
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     + Agregar
                   </button>
@@ -326,7 +411,7 @@ export function Dashboard() {
             </div>
           )}
 
-          {activeTab === 'history' && (
+          {activeTab === "history" && (
             <div>
               <DateSearchBar
                 onSearch={handleSearchByNaturalLanguage}
@@ -347,22 +432,24 @@ export function Dashboard() {
             </div>
           )}
 
-          {activeTab === 'import' && (
-            <ExcelImporter onImportComplete={() => {
-              refetchSummary();
-              refetch();
-            }} />
+          {activeTab === "import" && (
+            <ExcelImporter
+              onImportComplete={() => {
+                refetchSummary();
+                refetch();
+              }}
+            />
           )}
 
-          {activeTab === 'stats' && (
-            <Statistics />
-          )}
+          {activeTab === "stats" && <Statistics />}
 
-          {activeTab === 'config' && (
-            <ServicePricesConfig onRefresh={() => {
-              refetchSummary();
-              refetch();
-            }} />
+          {activeTab === "config" && (
+            <ServicePricesConfig
+              onRefresh={() => {
+                refetchSummary();
+                refetch();
+              }}
+            />
           )}
         </div>
       </div>

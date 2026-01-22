@@ -34,16 +34,16 @@ export function HaircutList({ haircuts, onEdit, onDelete, onEditPrice }: Haircut
   };
 
   return (
-    <div className="overflow-x-auto -mx-4">
-      <div className="max-h-[calc(100vh-320px)] overflow-y-auto border border-gray-100 rounded-lg">
-        <table className="w-full border-collapse text-xs">
+    <div className="overflow-x-auto -mx-3 sm:mx-0">
+      <div className="max-h-[calc(100vh-300px)] sm:max-h-[calc(100vh-350px)] md:max-h-[calc(100vh-400px)] overflow-y-auto border border-gray-100 rounded-lg">
+        <table className="w-full border-collapse text-xs sm:text-sm md:text-base">
         <thead>
           <tr className="bg-gray-50/80">
-            <th className="text-left px-3 py-2 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Fecha</th>
-            <th className="text-left px-3 py-2 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Cliente</th>
-            <th className="text-left px-3 py-2 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 hidden sm:table-cell">Servicio</th>
-            <th className="text-left px-3 py-2 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Precio</th>
-            <th className="text-center px-2 py-2 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 w-16">Acc</th>
+            <th className="text-left px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Fecha</th>
+            <th className="text-left px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Cliente</th>
+            <th className="text-left px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 hidden sm:table-cell">Servicio</th>
+            <th className="text-left px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">Precio</th>
+            <th className="text-center px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 w-16 sm:w-24 md:w-28">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -53,39 +53,48 @@ export function HaircutList({ haircuts, onEdit, onDelete, onEditPrice }: Haircut
               className="transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-0"
               style={{ animationDelay: `${index * 50}ms` }}
             >
-              <td className="px-3 py-2 text-gray-700 font-medium whitespace-nowrap">
+              <td className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 text-gray-700 font-medium whitespace-nowrap">
                 {new Date(haircut.date).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' })}
               </td>
-              <td className="px-3 py-2">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 truncate max-w-[70px]">
+              <td className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs sm:text-sm md:text-base font-medium bg-gray-100 text-gray-700 truncate max-w-[70px] md:max-w-[180px]">
                   {haircut.clientName}
                 </span>
               </td>
-              <td className="px-3 py-2 hidden sm:table-cell">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-violet-100 text-violet-700 truncate max-w-[80px]">
+              <td className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 hidden sm:table-cell">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs sm:text-sm md:text-base font-medium bg-violet-100 text-violet-700 truncate max-w-[80px] md:max-w-[140px]">
                   {haircut.serviceName}
                 </span>
               </td>
-              <td className="px-3 py-2 font-semibold text-gray-900 whitespace-nowrap">
+              <td className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4 font-semibold text-gray-900 whitespace-nowrap">
                 {formatCurrency(haircut.price)}
               </td>
-              <td className="px-2 py-2">
-                <div className="flex items-center justify-center gap-0.5">
+              <td className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4">
+                <div className="flex items-center justify-center gap-1">
                   <button
                     onClick={() => onEdit(haircut)}
-                    className="inline-flex items-center justify-center w-6 h-6 rounded bg-gray-100 hover:bg-gray-600 text-gray-600 hover:text-white transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded bg-gray-100 hover:bg-gray-600 text-gray-600 hover:text-white transition-all cursor-pointer"
                     title="Editar"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                   </button>
                   <button
+                    onClick={() => onEditPrice(haircut.id, haircut.price)}
+                    className="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded bg-orange-100 hover:bg-orange-500 text-orange-600 hover:text-white transition-all cursor-pointer"
+                    title="Editar precio"
+                  >
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
+                  <button
                     onClick={() => onDelete(haircut.id)}
-                    className="inline-flex items-center justify-center w-6 h-6 rounded bg-red-50 hover:bg-red-500 text-red-500 hover:text-white transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded bg-red-50 hover:bg-red-500 text-red-500 hover:text-white transition-all cursor-pointer"
                     title="Eliminar"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>

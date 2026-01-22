@@ -173,16 +173,16 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="p-2.5 bg-gray-50 border-l-4 border-gray-400 rounded-lg">
-        <p className="text-xs text-gray-600 italic">
-          ℹ️ Ingresa la cantidad y el precio se calcula.
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+      <div className="p-2.5 sm:p-3 md:p-5 bg-gray-50 border-l-4 border-gray-400 rounded-lg">
+        <p className="text-xs sm:text-sm md:text-lg text-gray-600 italic">
+          ℹ️ Ingresa la cantidad de cortes y el precio se calcula automáticamente.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3 md:gap-5">
         <div className="col-span-2 sm:col-span-1">
-          <label htmlFor="clientName" className="block text-xs font-medium text-gray-700 mb-1">
+          <label htmlFor="clientName" className="block text-xs sm:text-sm md:text-lg font-medium text-gray-700 mb-1 sm:mb-2">
             Cliente
           </label>
           <input
@@ -191,12 +191,12 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
             value={clientName}
             onChange={(e) => setClientName(e.target.value)}
             placeholder="Nombre"
-            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 bg-white border border-gray-200 rounded-lg text-sm sm:text-base md:text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
             required
           />
         </div>
         <div>
-          <label htmlFor="date" className="block text-xs font-medium text-gray-700 mb-1">
+          <label htmlFor="date" className="block text-xs sm:text-sm md:text-lg font-medium text-gray-700 mb-1 sm:mb-2">
             Fecha
           </label>
           <input
@@ -205,12 +205,12 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
             value={date}
             onChange={(e) => setDate(e.target.value)}
             max={today}
-            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 bg-white border border-gray-200 rounded-lg text-sm sm:text-base md:text-lg text-gray-900 focus:outline-none focus:border-gray-900"
             required
           />
         </div>
         <div>
-          <label htmlFor="time" className="block text-xs font-medium text-gray-700 mb-1">
+          <label htmlFor="time" className="block text-xs sm:text-sm md:text-lg font-medium text-gray-700 mb-1 sm:mb-2">
             Hora
           </label>
           <input
@@ -218,7 +218,21 @@ export function HaircutForm({ onSubmit, initialData, onCancel }: HaircutFormProp
             id="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 bg-white border border-gray-200 rounded-lg text-sm sm:text-base md:text-lg text-gray-900 focus:outline-none focus:border-gray-900"
+          />
+        </div>
+        <div>
+          <label htmlFor="tip" className="block text-xs sm:text-sm md:text-lg font-medium text-gray-700 mb-1 sm:mb-2">
+            Propina
+          </label>
+          <input
+            type="number"
+            id="tip"
+            value={tip || ''}
+            onChange={(e) => setTip(parseInt(e.target.value) || 0)}
+            placeholder="0"
+            min="0"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 bg-white border border-gray-200 rounded-lg text-sm sm:text-base md:text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900"
           />
         </div>
       </div>
